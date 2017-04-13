@@ -67,23 +67,10 @@ public class BinaryTree implements SimpleBinaryTree {
 
     @Override
     public Position parent(Position v) {
-        return parentHelper(root, v);
+        return v.parent;
     }
 
-    private Position parentHelper(Position currentRoot, Position p) {
-        if (isRoot(p) || currentRoot==null){
-            return null;
-        }
-        else {
-            if (currentRoot.left == p || currentRoot.right == p) {
-                return currentRoot;
 
-            }
-            else {
-                return parentHelper(currentRoot.left,p);
-            }
-        }
-    }
 
 
 
@@ -95,8 +82,8 @@ public class BinaryTree implements SimpleBinaryTree {
 
     @Override
     public boolean isInternal(Position v ) {
-        boolean paska=  ((v.left != null) || (v.right != null));
-        return paska;
+        return ((v.left != null) || (v.right != null));
+
     }
 
     @Override
@@ -134,10 +121,10 @@ public class BinaryTree implements SimpleBinaryTree {
 
     public void swap(Position v, Position e){
         if(v != null && e != null) {
-            Position temp;
-            temp = v;
-            v = e;
-            e = temp;
+            Item temp;
+            temp = v.getElement();
+            v.keyPair = e.getElement();
+            e.keyPair = temp;
 
         }
     }

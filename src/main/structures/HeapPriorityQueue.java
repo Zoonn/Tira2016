@@ -7,8 +7,8 @@ public class HeapPriorityQueue {
 
     private int size = 0;      // elementtien määrä keossa
     public BinaryTree T = new BinaryTree();
-    Position last;
-    Comparator comparator;
+    Position last = new Position();
+    Comparator comparator = new Comparator();
 
     public HeapPriorityQueue() {
         size = 0;
@@ -44,26 +44,26 @@ public class HeapPriorityQueue {
             }
             if (!T.isRoot(z))
                 z = T.rightChild(T.parent(z));
+                z.parent =last.parent;
             while (!T.isExternal(z))
                 z = T.leftChild(z);
+                z.parent =last;
         }
 
         Item gen = new Item(a, b);
         T.expandExternal(z);
         T.replace(z, gen);
+
         last = z;
         Position u;
 
+
         while (!T.isRoot(z)) {
             u = T.parent(z);
-
-            System.out.println("U:n avain: "+u.getElement().key());
-            System.out.println("Z:n avain " +z.getElement().key());
-            System.out.println();
             if (comparator.isLessThanEqual(u.getElement().key(), z.getElement().key())) break;
             T.swap(u, z);
             z = u;
-            System.out.println("Ylösbubblaus tehty");
+
 
         }
         size++;
@@ -150,11 +150,9 @@ public class HeapPriorityQueue {
 
     public void bubbleDown() {
         Position p = T.root;
-        System.out.println("PIENIN:" + T.root.getElement().key());
 
         while (p.left != null) {
             Position smallerChild = p.getLeft();
-            System.out.println("mroo");
             if (p.right != null
                     && p.getLeft().keyPair.key() > p.getRight().keyPair.key()) {
                 smallerChild = p.getRight();
@@ -162,7 +160,6 @@ public class HeapPriorityQueue {
 
             if (p.keyPair.key() > smallerChild.keyPair.key()) {
                 T.swap(p, smallerChild);
-                System.out.println("Swapatty");
             } else {
                 break;
             }

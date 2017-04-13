@@ -4,17 +4,9 @@ public class Position{
 
     public Position left;
     public Position right;
+    public Position parent;
     public Item keyPair;
 
-    public Position(Item keyPair)
-    {
-        this.keyPair=keyPair;
-        this.left = null;
-        this.right = null;
-    }
-    public Position(){
-
-    }
     public void printKeyPair()
     {
         System.out.println(keyPair);
