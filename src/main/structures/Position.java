@@ -1,26 +1,43 @@
 package main.structures;
 
-/**
- * Created by Omppu on 19/01/2017.
- */
 public class Position{
 
     public Position left;
     public Position right;
-    public int data;
+    public Item keyPair;
 
-    public Position(int data)
+    public Position(Item keyPair)
     {
-        this.data=data;
+        this.keyPair=keyPair;
+        this.left = null;
+        this.right = null;
     }
+    public Position(){
 
-    public void printNode()
+    }
+    public void printKeyPair()
     {
-        System.out.println(data);
+        System.out.println(keyPair);
     }
-    public Comparable getValue() {
-        return data;
+    public Item getElement() {
+        return keyPair;
+    }
+    public void setElement(Item a){
+        this.keyPair = a;
     }
 
+
+    public Position getLeft() {
+        return left;
+    }
+    public Position getRight() {
+        return right;
+    }
+    public void setRight(Position n) {
+        right = n;
+    }
+    public void setLeft(Position p) {
+        left = p;
+    }
 
 }

@@ -19,11 +19,13 @@
  */
 import main.*;
 import java.io.IOException;
+import java.security.InvalidKeyException;
 
 public class Tira2016 {
 
-    public static void main (String args[]) throws IOException {
+    public static void main (String args[]) throws IOException, InvalidKeyException {
         Handler handler = new Handler();
         handler.start();
+
     }
 }

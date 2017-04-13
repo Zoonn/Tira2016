@@ -12,10 +12,8 @@ public class Comparator {
         return aa < bee;
     }
 
-    boolean isLessThanEqual(Object a, Object b){
-        int aa = (int) ((Item) a).key();
-        int bee = (int) ((Item) b).key();
-        return aa <= bee;
+    boolean isLessThanEqual(int a, int b){
+        return a <= b;
     }
 
     boolean isEqualTo(Object a, Object b){

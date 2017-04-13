@@ -15,5 +15,5 @@ public interface SimpleBinaryTree extends SimpleTree {
     // Update methods
     public void expandExternal(Position v);
     public Object removeAboveExternal(Position v);
-    public void replace(Object z,Object n);
+    public Object replace(Object z,Object n);
 }

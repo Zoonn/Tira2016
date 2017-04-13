@@ -1,10 +1,6 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Lukija-luokka, joka vastaa tiedostosta lukemisesta ja uuteen tiedostoon kirjoittamsesta.
@@ -12,38 +8,59 @@ import java.io.IOException;
 
 public class Reader {
 
-    private void readInput()
-    {
-        String line;
-
+    static String[][] Read() throws IOException {
+        String[][] locker = new String[20][20];
+        String[] parts;
+        int space = 0;
         try {
-            BufferedReader br = new BufferedReader( new FileReader("input.txt"));
+            FileInputStream stream = new FileInputStream("input.txt");
+            InputStreamReader reader = new InputStreamReader(stream);
+            BufferedReader buffReader = new BufferedReader(reader);
 
-            for(int i=0; i<6; i++)
-            {
-                line=br.readLine();
-                String[] values=line.split(",");
-                System.out.println(values[0]);
+
+            while (buffReader.ready()) {
+
+                String line = buffReader.readLine();
+                line = line.replaceAll("\\s","");
+                parts = line.split(",");
+                for(int i = 0; i < parts.length; i++){
+                    locker[space][i] = parts[i];
+                }
+                space++;
             }
-
-        } catch(IOException e)
-        {
-            System.out.println("File not found.");
+            buffReader.close();
+            System.out.println("Luku onnistunut!");
         }
+        catch ( FileNotFoundException e){
+            System.out.println("Tiedostoa ei löytynyt!");
+        }
+        catch(Exception e){
+            System.out.println("Virhe lukiessa: "+e);
+        }
+        return locker;
     }
-    private void writeOutput()
-    {
 
-        String s = "Masa";
+    /**
+     * Saver-method that is used to save the output of the program for the user.
+     *
+     * @throws IOException
+     */
+    static void Save(String output) throws IOException{
+
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("output.txt"));
-            bw.write(s);
-            bw.newLine();
-            bw.write(s);
-            bw.close();
-        } catch (IOException e) {
-            System.err.format("IOException: %s%n", e);
+            File saver = new File("output.txt");
+            FileOutputStream saveStream = new FileOutputStream(saver);
+            PrintWriter writer = new PrintWriter(saveStream,true);
+
+            writer.println(output);
+
+            saveStream.close();
         }
-        System.out.println("Kirjoitetaan...");
+        catch(FileNotFoundException e){
+            System.out.println("Tiedostoa ei Löytynyt!");
+        }
+        catch(Exception e){
+            System.out.println("Virhe tallentaessa!");
+        }
     }
 }

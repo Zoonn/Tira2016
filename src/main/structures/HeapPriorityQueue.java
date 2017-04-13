@@ -3,35 +3,25 @@ package main.structures;
 import java.security.InvalidKeyException;
 import java.security.InvalidParameterException;
 
-public class HeapPriorityQueue implements PriorityQueue {
+public class HeapPriorityQueue {
 
-    private int size;      // elementtien määrä keossa
-    BinaryTree T;
+    private int size = 0;      // elementtien määrä keossa
+    public BinaryTree T = new BinaryTree();
     Position last;
     Comparator comparator;
 
-    public HeapPriorityQueue(){
+    public HeapPriorityQueue() {
         size = 0;
     }
 
-    private void Heap(){
-        for(int i = size / 2; i>0;i--){
-            percolateDown(i);
-        }
-    }
 
-    private boolean isLeftChild(Position p) throws InvalidParameterException{
-        try{
+    private boolean isLeftChild(Position p) throws InvalidParameterException {
+        try {
             return T.leftChild(T.parent(p)).equals(p);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return false;
 
         }
-    }
-
-    private void percolateDown(int h ) {
-
     }
 
     /**
@@ -40,12 +30,10 @@ public class HeapPriorityQueue implements PriorityQueue {
      * @param a
      * @param b
      */
-    @Override
-    public void insertItem(int a, Comparable b)throws InvalidKeyException {
-        if (!comparator.isComparable(a)) {
-            throw new InvalidKeyException("Invalid Key!");
-        }
+
+    public void insertItem(int a, Object b) throws InvalidKeyException {
         Position z;
+
         if (isEmpty())
             z = T.root();
         else {
@@ -55,66 +43,131 @@ public class HeapPriorityQueue implements PriorityQueue {
                 z = T.parent(z);
             }
             if (!T.isRoot(z))
-                z = T.rightChild(z);
+                z = T.rightChild(T.parent(z));
             while (!T.isExternal(z))
                 z = T.leftChild(z);
         }
 
+        Item gen = new Item(a, b);
         T.expandExternal(z);
-        T.replace(z, new Item(a,b));
+        T.replace(z, gen);
         last = z;
-        Position u = null;
+        Position u;
 
-        while(!T.isRoot(z)) {
+        while (!T.isRoot(z)) {
             u = T.parent(z);
-            if(!comparator.isLessThanEqual(u.getValue(),z.getValue())) break;
-            T.swap(u,z);
+
+            System.out.println("U:n avain: "+u.getElement().key());
+            System.out.println("Z:n avain " +z.getElement().key());
+            System.out.println();
+            if (comparator.isLessThanEqual(u.getElement().key(), z.getElement().key())) break;
+            T.swap(u, z);
             z = u;
+            System.out.println("Ylösbubblaus tehty");
+
         }
-
-    }
-
-    private Object keyOfPosition(Position p) throws Exception{
-        return ((Item) p.element()).key();
+        size++;
     }
 
     /**
      * Pienimmän alkion etsintä prioriteettijonosta.
      */
-    @Override
-    public Comparable minElement() {
-        return null;
+
+    public Item minElement() {
+        Item min = T.root.getElement();
+        return min;
     }
+
 
     /**
      * Pienimmän avaimen etsintä prioriteettijonosta.
      */
-    @Override
-    public Comparable minKey() {
-        return null;
+
+    public int minKey() {
+        Item min = T.root.getElement();
+        return min.key();
     }
 
     /**
      * Poista pienin alkio priotriteettijonosta
      */
-    @Override
-    public Comparable deleteMin() {
-        return null;
+
+    public Item deleteMin() {
+        Item returnValue;
+
+        if (isEmpty()) {
+            return null;
+        } else if (size() == 1) {
+            returnValue = T.root.getElement();
+            T.root = last = null;
+            size--;
+            return returnValue;
+        } else {
+            returnValue = T.root.getElement();
+            Position left = T.root.getLeft();
+            left.setLeft(null);
+            T.root.setRight(null);
+            T.root = left;
+            size--;
+            bubbleDown();
+            return returnValue;
+
+        }
+
     }
+
 
     /**
      * Testi, katsotaan, jonko jono tyhjä
      */
-    @Override
+
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     /**
      * Koon tutkiminen
      */
-    @Override
+
     public int size() {
-        return 0;
+        return size;
+    }
+
+    public void print() {
+        printPreorder(T.root);
+        System.out.println();
+    }
+
+    private void printPreorder(Position node) {
+        System.out.println(node.getElement().key() + " ");
+        if (node.getLeft() != null) {
+            printPreorder(node.getRight());
+        }
+        if (node.getRight() != null) {
+            printPreorder(node.getRight());
+        }
+    }
+
+    public void bubbleDown() {
+        Position p = T.root;
+        System.out.println("PIENIN:" + T.root.getElement().key());
+
+        while (p.left != null) {
+            Position smallerChild = p.getLeft();
+            System.out.println("mroo");
+            if (p.right != null
+                    && p.getLeft().keyPair.key() > p.getRight().keyPair.key()) {
+                smallerChild = p.getRight();
+            }
+
+            if (p.keyPair.key() > smallerChild.keyPair.key()) {
+                T.swap(p, smallerChild);
+                System.out.println("Swapatty");
+            } else {
+                break;
+            }
+
+            p = smallerChild;
+        }
     }
 }

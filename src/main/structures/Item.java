@@ -5,14 +5,15 @@ package main.structures;
  */
 
 public class Item {
-    private Object key, elem;
-    protected Item ( Object k, Object e) {
+    private int key;
+    Object elem;
+    protected Item ( int k, Object e) {
         key = k;
         elem = e;
     }
-    public Object key() { return key; }
+    public int key() { return key; }
     public Object element() { return elem; }
-    public void setKey(Object k) { key = k; }
+    public void setKey(int k) { key = k; }
     public void setElement(Object e) { elem = e;}
 }
 

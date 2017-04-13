@@ -7,12 +7,12 @@ import java.util.Enumeration;
  */
 public class BinaryTree implements SimpleBinaryTree {
 
-    protected Position root;
+    Position root;
     int rootIndex = 1;
     int lastIndex = 1;
 
     public BinaryTree(){
-        root = null;
+        root = new Position();
     }
 
 
@@ -23,6 +23,7 @@ public class BinaryTree implements SimpleBinaryTree {
 
     @Override
     public Position rightChild(Position v) {
+
         return v.right;
     }
 
@@ -34,9 +35,14 @@ public class BinaryTree implements SimpleBinaryTree {
         return null;
     }
 
-    @Override
     public void expandExternal(Position v) {
-        Position currentRoot = v;
+        if(!isInternal(v)){
+                Position r = new Position();
+                Position l = new Position();
+                v.left = l;
+                v.right = r;
+        }
+
 
     }
 
@@ -46,8 +52,12 @@ public class BinaryTree implements SimpleBinaryTree {
     }
 
     @Override
-    public void replace(Object z, Object n) {
-
+    public Object replace(Object z, Object n) {
+        Position p = (Position)z;
+        Item temp;
+        temp = p.getElement();
+        p.setElement((Item)n);
+        return temp;
     }
 
     @Override
@@ -60,22 +70,23 @@ public class BinaryTree implements SimpleBinaryTree {
         return parentHelper(root, v);
     }
 
-    private Position parentHelper(Position currentRoot, Position v){
-        if( v == currentRoot || isRoot(v))
+    private Position parentHelper(Position currentRoot, Position p) {
+        if (isRoot(p) || currentRoot==null){
             return null;
-        else{
-            if(currentRoot.left==v || currentRoot.right==v)
-                return root;
-            else{
-                if(currentRoot.data < v.data){
-                    return parent(currentRoot.right);
-                }
-                else{
-                    return parent(currentRoot.left);
-                }
+        }
+        else {
+            if (currentRoot.left == p || currentRoot.right == p) {
+                return currentRoot;
+
+            }
+            else {
+                return parentHelper(currentRoot.left,p);
             }
         }
     }
+
+
+
 
     @Override
     public Enumeration children(Position v) {
@@ -83,13 +94,14 @@ public class BinaryTree implements SimpleBinaryTree {
     }
 
     @Override
-    public boolean isInternal(Position v) {
-        return false;
+    public boolean isInternal(Position v ) {
+        boolean paska=  ((v.left != null) || (v.right != null));
+        return paska;
     }
 
     @Override
     public boolean isExternal(Position v) {
-        return false;
+        return !isInternal(v);
     }
 
     @Override
